@@ -1,4 +1,8 @@
 # dashboard-covid19
+this is my first project figma, vue and tailwind when learning by doing
+
+## Sources
+Design [Figma](https://www.figma.com/file/dUUDsUYhpKbJMX652mkWSB/Dashboar-Covid-19?node-id=0%3A1).
 
 ## Project setup
 ```
