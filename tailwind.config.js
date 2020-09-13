@@ -1,5 +1,10 @@
 module.exports = {
-  theme: {},
+  theme: {
+    container: {
+      center:'true',
+      padding:'1rem'
+    },
+  },
   variants: {},
   plugins: [],
   purge: {
