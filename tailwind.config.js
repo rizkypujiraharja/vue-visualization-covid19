@@ -1,9 +1,19 @@
 module.exports = {
   theme: {
-    container: {
-      center:'true',
-      padding:'1rem'
-    },
+    extend: {
+      container: {
+        center:'true',
+        padding:'1rem'
+      },
+      colors: {
+        warning: '#FF9F1C',
+        success: '#2EC4B6',
+        danger: '#E71D36',
+      },
+      boxShadow: {
+        top: '0px -5px 15px rgba(0, 0, 0, 0.1)',
+      },
+    }
   },
   variants: {},
   plugins: [],
