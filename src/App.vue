@@ -2,7 +2,6 @@
   <div class="container py-4 text-gray-700">
     <div class="flex justify-between mb-4">
       <div class="text-xl pt-2 font-bold">Dashboard Covid-19</div>
-
       <div class="relative">
         <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
           <option>All Countries</option>
@@ -18,15 +17,15 @@
     <div class="flex flex-wrap sm:-mx-4">
       <div class="w-full sm:w-1/3 sm:px-4 mb-4">
         <div class="bg-warning rounded-md px-4 py-2 text-white">
-          <div class="text-lg text-right">Recovey</div>
           <div class="flex justify-between">
-            <div class="text-5xl">
+            <div class="text-6xl pt-3 text-orange-300">
               <i class="fas fa-procedures"></i>
             </div>
             <div>
-              <div class="text-3xl font-bold">100.000</div>
+              <div class="text-lg">Total Confirmed</div>
+              <div class="text-3xl font-bold">{{ filters.numberWithDot(state.summary.confirmed.total) }}</div>
               <div class="text-sm flex">
-                New 100.000
+                New {{ filters.numberWithDot(state.summary.confirmed.today) }}
                 <span class="ml-2 bg-white rounded text-success py-0 px-2 text-xs">+100</span>
               </div>
             </div>
@@ -35,15 +34,15 @@
       </div>
       <div class="w-full sm:w-1/3 sm:px-4 mb-4">
         <div class="bg-success rounded-md px-4 py-2 text-white">
-          <div class="text-lg text-right">Recovey</div>
           <div class="flex justify-between">
-            <div class="text-5xl">
-              <i class="fas fa-procedures"></i>
+            <div class="text-6xl pt-3 text-teal-300">
+              <i class="fas fa-running"></i>
             </div>
             <div>
-              <div class="text-3xl font-bold">100.000</div>
+              <div class="text-lg text-right">Total Recovered</div>
+              <div class="text-3xl font-bold">{{ filters.numberWithDot(state.summary.recovered.total) }}</div>
               <div class="text-sm flex">
-                New 100.000
+                New {{ filters.numberWithDot(state.summary.recovered.today) }}
                 <span class="ml-2 bg-white rounded text-success py-0 px-2 text-xs">+100</span>
               </div>
             </div>
@@ -52,15 +51,15 @@
       </div>
       <div class="w-full sm:w-1/3 sm:px-4 mb-4">
         <div class="bg-danger rounded-md px-4 py-2 text-white">
-          <div class="text-lg text-right">Recovey</div>
           <div class="flex justify-between">
-            <div class="text-5xl">
-              <i class="fas fa-procedures"></i>
+            <div class="text-6xl pt-3 text-red-400">
+              <i class="fas fa-skull-crossbones"></i>
             </div>
             <div>
-              <div class="text-3xl font-bold">100.000</div>
+              <div class="text-lg text-right">Total Death</div>
+              <div class="text-3xl font-bold">{{ filters.numberWithDot(state.summary.death.total) }}</div>
               <div class="text-sm flex">
-                New 100.000
+                New {{ filters.numberWithDot(state.summary.death.today) }}
                 <span class="ml-2 bg-white rounded text-success py-0 px-2 text-xs">+100</span>
               </div>
             </div>
@@ -86,10 +85,59 @@
 </template>
 
 <script>
+import { onMounted, reactive } from 'vue'
+import filters from "./filters"
 // import HelloWorld from './components/HelloWorld.vue'
 
 export default {
   name: 'App',
+  setup() {
+
+    const state = reactive( {
+      summary: {
+        confirmed:{},
+        recovered:{},
+        death:{}
+      }
+    })
+
+    onMounted(async () => {
+      const today = await getSummary();
+      const yesterday = await getSummary(true);
+
+      setSummary(today, yesterday)
+    })
+
+    async function getSummary(yesterday = false) {
+      const summary = await fetch('https://disease.sh/v3/covid-19/all?yesterday='+yesterday)
+      return summary.json()
+    }
+
+    function setSummary(today, yesterday) {
+      state.summary.confirmed = {
+        today: today.todayCases,
+        yesterday: yesterday.todayCases,
+        total: today.cases
+      }
+
+      state.summary.recovered = {
+        today: today.todayRecovered,
+        yesterday: yesterday.todayRecovered,
+        total: today.recovered
+      }
+
+      state.summary.death = {
+        today: today.todayDeaths,
+        yesterday: yesterday.todayDeaths,
+        total: today.deaths
+      }
+    }
+
+    return {
+      state,
+      filters
+    }
+  },
   components: {
     // HelloWorld
   }
