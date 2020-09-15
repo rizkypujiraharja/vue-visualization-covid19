@@ -1,7 +1,7 @@
 <template>
   <div class="container py-4 text-gray-700">
     <div class="flex justify-between mb-4">
-      <div class="text-xl pt-2 font-bold">Dashboard Covid-19</div>
+      <div class="text-xl pt-2 font-bold">Visualization Covid-19</div>
       <div class="relative">
         <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
           <option>All Countries</option>
@@ -102,8 +102,8 @@ export default {
     })
 
     onMounted(async () => {
-      const today = await getSummary();
-      const yesterday = await getSummary(true);
+      const today = getSummary();
+      const yesterday = getSummary(true);
 
       setSummary(today, yesterday)
     })
