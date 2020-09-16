@@ -111,24 +111,25 @@ export default {
           today: today.todayCases,
           yesterday: yesterday.todayCases,
           total: today.cases,
-          diff: today.cases - yesterday.cases,
-          percentage: today.cases / yesterday.cases
+          diff: today.todayCases - yesterday.todayCases,
+          percentage: (((today.todayCases - yesterday.todayCases) / yesterday.todayCases) * 100).toFixed(2)
         },
         recovered: {
           today: today.todayRecovered,
           yesterday: yesterday.todayRecovered,
           total: today.recovered,
-          diff: today.recovered - yesterday.recovered,
-          percentage: today.recovered / yesterday.recovered
+          diff: today.todayRecovered - yesterday.todayRecovered,
+          percentage: (((today.todayRecovered - yesterday.todayRecovered) / yesterday.todayRecovered) * 100).toFixed(2)
         },
         death: {
           today: today.todayDeaths,
           yesterday: yesterday.todayDeaths,
           total: today.deaths,
-          diff: today.deaths - yesterday.deaths,
-          percentage: today.deaths / yesterday.deaths
+          diff: today.todayDeaths - yesterday.todayDeaths,
+          percentage: (((today.todayDeaths - yesterday.todayDeaths) / yesterday.todayDeaths) * 100).toFixed(2)
         },
       };
+      console.log(state.summary)
     }
 
     return {

@@ -13,8 +13,9 @@
             <span
               class="ml-2 bg-white rounded py-0 px-2 text-xs"
               :class="data.diff >= 0 ? 'text-success' : 'text-danger'"
-            > {{ data.diff >= 0 ? '+' : '-' }}
-              {{ filters.numberWithDot(data.diff) }}
+            > {{ data.diff >= 0 ? '+' : '' }}
+              {{ filters.numberWithDot(data.diff) }} {{ data.diff >= 0 ? '+ ' : '' }}
+              {{ data.percentage }}%
             </span>
           </div>
         </div>
