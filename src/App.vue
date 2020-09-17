@@ -4,6 +4,8 @@
       <div class="text-xl pt-2 font-bold">Visualization Covid-19</div>
       <div class="relative">
         <select
+          v-model="state.selectedCountry"
+          @change="loadSummary()"
           class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
         >
           <option value="all">All Countries</option>
@@ -65,6 +67,7 @@ export default {
   name: "App",
   setup() {
     const state = reactive({
+      selectedCountry: 'all',
       countries: [],
       summary: {
         confirmed: {},
@@ -75,12 +78,30 @@ export default {
     });
 
     onMounted(() => {
-      Promise.all([getSummary(), getSummary(true), getCountries(), getCountries(true)]).then(function (values) {
-        const [summaryToday, summaryYesterday, countryToday, countryYesterday] = values;
-        setSummary(summaryToday, summaryYesterday);
+      loadCountry()
+      loadSummary()
+    });
+
+    function loadCountry() {
+      Promise.all([getCountries(), getCountries(true)]).then(function (values) {
+        const [countryToday, countryYesterday] = values;
         setCounties(countryToday, countryYesterday);
       });
-    });
+    }
+
+    function loadSummary() {
+      Promise.all([getSummary(), getSummary(true)]).then(function (values) {
+        const [summaryToday, summaryYesterday] = values;
+        setSummary(summaryToday, summaryYesterday);
+      });
+    }
+
+    function getUrlSummary() {
+      if(state.selectedCountry === 'all'){
+        return 'https://disease.sh/v3/covid-19/all?yesterday=';
+      }
+      return `https://disease.sh/v3/covid-19/countries/${state.selectedCountry}?strict=true&yesterday=`;
+    }
 
     function getCountries(yesterday = false) {
       return fetch(
@@ -89,9 +110,8 @@ export default {
     }
 
     function getSummary(yesterday = false) {
-      return fetch(
-        "https://disease.sh/v3/covid-19/all?yesterday=" + yesterday
-      ).then((response) => response.json());
+      const url = getUrlSummary() + yesterday
+      return fetch(url).then((response) => response.json());
     }
 
     function setCounties(today, yesterday){
@@ -134,6 +154,7 @@ export default {
 
     return {
       state,
+      loadSummary
       // dropdownCountries
     };
   },
