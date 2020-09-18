@@ -9,7 +9,11 @@
           class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
         >
           <option value="all">All Countries</option>
-          <option v-for="(country, key) in state.countries" :key="key" :value="country.code">{{country.name}}</option>
+          <option
+            v-for="(country, key) in state.countries"
+            :key="key"
+            :value="country.code"
+          >{{country.name}}</option>
         </select>
         <div
           class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
@@ -22,7 +26,6 @@
     </div>
 
     <div class="flex flex-wrap sm:-mx-4">
-
       <summary-card
         :data="state.summary.confirmed"
         :icon="'fa-procedures'"
@@ -53,7 +56,12 @@
         <div class="bg-white rounded-md px-4 py-2 shadow-top">&nbsp;</div>
       </div>
       <div class="w-full sm:w-1/3 sm:px-4 mb-4">
-        <div class="bg-white rounded-md px-4 py-2 shadow-top">&nbsp;</div>
+        <div
+          class="bg-white rounded-md px-4 py-2 shadow-top overflow-y-auto"
+          style="height: 600px;"
+        >
+          <data-countries :dataCountries="state.dataCountries" />
+        </div>
       </div>
     </div>
   </div>
@@ -61,25 +69,26 @@
 
 <script>
 import { onMounted, reactive } from "vue";
-import SummaryCard from './components/SummaryCard.vue'
+import SummaryCard from "./components/SummaryCard.vue";
+import DataCountries from "./components/DataCountries.vue";
 
 export default {
   name: "App",
   setup() {
     const state = reactive({
-      selectedCountry: 'all',
+      selectedCountry: "all",
       countries: [],
       summary: {
         confirmed: {},
         recovered: {},
         death: {},
       },
-      dataCountries: []
+      dataCountries: [],
     });
 
     onMounted(() => {
-      loadCountry()
-      loadSummary()
+      loadCountry();
+      loadSummary();
     });
 
     function loadCountry() {
@@ -92,74 +101,96 @@ export default {
     function loadSummary() {
       Promise.all([getSummary(), getSummary(true)]).then(function (values) {
         const [summaryToday, summaryYesterday] = values;
-        setSummary(summaryToday, summaryYesterday);
+        state.summary = setSummary(summaryToday, summaryYesterday);
       });
     }
 
     function getUrlSummary() {
-      if(state.selectedCountry === 'all'){
-        return 'https://disease.sh/v3/covid-19/all?yesterday=';
+      if (state.selectedCountry === "all") {
+        return "https://disease.sh/v3/covid-19/all?yesterday=";
       }
       return `https://disease.sh/v3/covid-19/countries/${state.selectedCountry}?strict=true&yesterday=`;
     }
 
     function getCountries(yesterday = false) {
       return fetch(
-        "https://disease.sh/v3/covid-19/countries?yesterday=" + yesterday
+        "https://disease.sh/v3/covid-19/countries?sort=todayCases&yesterday=" +
+          yesterday
       ).then((response) => response.json());
     }
 
     function getSummary(yesterday = false) {
-      const url = getUrlSummary() + yesterday
+      const url = getUrlSummary() + yesterday;
       return fetch(url).then((response) => response.json());
     }
 
-    function setCounties(today, yesterday){
-      state.countries = today.map(country => {
+    function setCounties(today, yesterday) {
+      state.countries = today.map((country) => {
         return {
           name: country.country,
-          code: country.countryInfo.iso2 || country.country
-        }
-      })
+          code: country.countryInfo.iso2 || country.country,
+        };
+      }).sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
 
-      console.log(yesterday)
+      state.dataCountries = today.map((country) => {
+        const countryYesterday = yesterday.find(
+          (p) => p.country == country.country
+        );
+
+        return {
+          name: country.country,
+          flag: country.countryInfo.flag,
+          data: setSummary(country, countryYesterday),
+        };
+      });
     }
 
     function setSummary(today, yesterday) {
-      state.summary = {
+      return {
         confirmed: {
           today: today.todayCases,
           yesterday: yesterday.todayCases,
           total: today.cases,
           diff: today.todayCases - yesterday.todayCases,
-          percentage: (((today.todayCases - yesterday.todayCases) / yesterday.todayCases) * 100).toFixed(2)
+          percentage: (
+            ((today.todayCases - yesterday.todayCases) / yesterday.todayCases) *
+            100
+          ).toFixed(2),
         },
         recovered: {
           today: today.todayRecovered,
           yesterday: yesterday.todayRecovered,
           total: today.recovered,
           diff: today.todayRecovered - yesterday.todayRecovered,
-          percentage: (((today.todayRecovered - yesterday.todayRecovered) / yesterday.todayRecovered) * 100).toFixed(2)
+          percentage: (
+            ((today.todayRecovered - yesterday.todayRecovered) /
+              yesterday.todayRecovered) *
+            100
+          ).toFixed(2),
         },
         death: {
           today: today.todayDeaths,
           yesterday: yesterday.todayDeaths,
           total: today.deaths,
           diff: today.todayDeaths - yesterday.todayDeaths,
-          percentage: (((today.todayDeaths - yesterday.todayDeaths) / yesterday.todayDeaths) * 100).toFixed(2)
+          percentage: (
+            ((today.todayDeaths - yesterday.todayDeaths) /
+              yesterday.todayDeaths) *
+            100
+          ).toFixed(2),
         },
       };
-      console.log(state.summary)
     }
 
     return {
       state,
-      loadSummary
+      loadSummary,
       // dropdownCountries
     };
   },
   components: {
-    SummaryCard
+    SummaryCard,
+    DataCountries
   },
 };
 </script>
