@@ -16,7 +16,7 @@
           >
             {{ country.data.confirmed.diff >= 0 ? '+' : '' }}
             {{ numeral(country.data.confirmed.diff).format('0,0') }}
-            ({{ country.data.confirmed.diff >= 0 ? '+ ' : '' }}{{country.data.confirmed.percentage }}%)
+            ({{ country.data.confirmed.diff >= 0 ? '+' : '' }}{{country.data.confirmed.percentage }}%)
           </span>
         </p>
       </div>

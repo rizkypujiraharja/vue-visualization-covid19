@@ -56,8 +56,11 @@
         <div class="bg-white rounded-md px-4 py-2 shadow-top mb-4" style="height: 175px;">
           <chart-data :country="state.selectedCountry"/>
         </div>
-        <div class="bg-white rounded-md px-4 py-2 shadow-top mt-4" style="height: 410px;">&nbsp;</div>
+        <div class="bg-white rounded-md px-4 py-2 shadow-top mt-4" style="height: 410px;" id="mapid">
+          <Map :data="[]" />
+        </div>
       </div>
+
       <div class="w-full sm:w-1/3 sm:px-4 mb-4">
         <div
           class="bg-white rounded-md px-4 py-2 shadow-top overflow-y-auto"
@@ -75,6 +78,7 @@ import { onMounted, reactive } from "vue";
 import SummaryCard from "./components/SummaryCard.vue";
 import DataCountries from "./components/DataCountries.vue";
 import ChartData from "./components/ChartData.vue";
+import Map from "./components/Map.vue";
 
 export default {
   name: "App",
@@ -198,6 +202,7 @@ export default {
     SummaryCard,
     DataCountries,
     ChartData,
+    Map
   },
 };
 </script>
