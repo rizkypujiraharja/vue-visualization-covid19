@@ -7,14 +7,14 @@
         </div>
         <div class="text-right">
           <div class="text-lg">{{title}}</div>
-          <div class="text-3xl font-bold">{{ filters.numberWithDot(data.total) }}</div>
+          <div class="text-3xl font-bold">{{ numeral(data.total).format('0,0') }}</div>
           <div class="text-sm flex">
-            Today {{ filters.numberWithDot(data.today) }}
+            Today {{ numeral(data.today).format('0,0') }}
             <span
               class="ml-2 bg-white rounded py-0 px-2 text-xs"
               :class="data.diff >= 0 ? 'text-success' : 'text-danger'"
             > {{ data.diff >= 0 ? '+' : '' }}
-              {{ filters.numberWithDot(data.diff) }}
+              {{ numeral(data.diff).format('0,0') }}
               ({{ data.diff >= 0 ? '+ ' : '' }}{{ data.percentage }}%)
             </span>
           </div>
@@ -26,7 +26,7 @@
 
 <script>
 
-import filters from "./../filters";
+import numeral from "numeral";
 
 export default {
   name: "SummaryCard",
@@ -40,7 +40,7 @@ export default {
 
   setup() {
     return {
-      filters
+      numeral
     }
   }
 };

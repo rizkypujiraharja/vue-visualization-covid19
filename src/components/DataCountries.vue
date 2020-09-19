@@ -9,13 +9,13 @@
       <div class="text-sm">
         <p class="text-gray-700 leading-none font-semibold">{{ country.name }}</p>
         <p class="text-gray-600 text-sm">
-          Today {{ filters.numberWithDot(country.data.confirmed.today) }}
+          Today {{ numeral(country.data.confirmed.today).format('0,0') }}
           <span
             class="ml-2 text-xs"
             :class="country.data.confirmed.diff >= 0 ? 'text-success' : 'text-danger'"
           >
             {{ country.data.confirmed.diff >= 0 ? '+' : '' }}
-            {{ filters.numberWithDot(country.data.confirmed.diff) }}
+            {{ numeral(country.data.confirmed.diff).format('0,0') }}
             ({{ country.data.confirmed.diff >= 0 ? '+ ' : '' }}{{country.data.confirmed.percentage }}%)
           </span>
         </p>
@@ -26,7 +26,8 @@
 </template>
 
 <script>
-import filters from "./../filters";
+
+import numeral from "numeral";
 
 export default {
   name: "DataCountries",
@@ -36,7 +37,7 @@ export default {
 
   setup() {
     return {
-      filters,
+      numeral,
     };
   },
 };

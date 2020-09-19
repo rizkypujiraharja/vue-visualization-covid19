@@ -12,7 +12,7 @@
           <option
             v-for="(country, key) in state.countries"
             :key="key"
-            :value="country.code"
+            :value="country.name"
           >{{country.name}}</option>
         </select>
         <div
@@ -53,7 +53,10 @@
 
     <div class="flex flex-wrap sm:-mx-4 mt-4">
       <div class="w-full sm:w-2/3 sm:px-4 mb-4">
-        <div class="bg-white rounded-md px-4 py-2 shadow-top">&nbsp;</div>
+        <div class="bg-white rounded-md px-4 py-2 shadow-top mb-4" style="height: 175px;">
+          <chart-data :country="state.selectedCountry"/>
+        </div>
+        <div class="bg-white rounded-md px-4 py-2 shadow-top mt-4" style="height: 410px;">&nbsp;</div>
       </div>
       <div class="w-full sm:w-1/3 sm:px-4 mb-4">
         <div
@@ -71,6 +74,7 @@
 import { onMounted, reactive } from "vue";
 import SummaryCard from "./components/SummaryCard.vue";
 import DataCountries from "./components/DataCountries.vue";
+import ChartData from "./components/ChartData.vue";
 
 export default {
   name: "App",
@@ -125,12 +129,14 @@ export default {
     }
 
     function setCounties(today, yesterday) {
-      state.countries = today.map((country) => {
-        return {
-          name: country.country,
-          code: country.countryInfo.iso2 || country.country,
-        };
-      }).sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
+      state.countries = today
+        .map((country) => {
+          return {
+            name: country.country,
+            info: country.countryInfo,
+          };
+        })
+        .sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
 
       state.dataCountries = today.map((country) => {
         const countryYesterday = yesterday.find(
@@ -190,7 +196,8 @@ export default {
   },
   components: {
     SummaryCard,
-    DataCountries
+    DataCountries,
+    ChartData,
   },
 };
 </script>
