@@ -4,9 +4,8 @@
 <script>
 import numeral from "numeral";
 import L from "leaflet";
-import 'leaflet/dist/leaflet.css'
-import 'leaflet.minichart/dist/leaflet.minichart.js'
 import { onMounted, reactive } from "vue";
+import 'leaflet.minichart/dist/leaflet.minichart.js';
 
 export default {
   name: "Map",
@@ -69,3 +68,7 @@ export default {
   },
 };
 </script>
+
+<style>
+@import '~leaflet/dist/leaflet.css';
+</style>
