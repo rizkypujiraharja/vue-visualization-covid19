@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import './assets/tailwind.css'
+import 'leaflet/dist/leaflet.css';
 import numeral from "numeral";
 
 numeral.register("locale", "id", {
