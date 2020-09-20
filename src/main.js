@@ -15,7 +15,7 @@ numeral.register("locale", "id", {
         trillion: "T"
     },
     currency: {
-        symbol: "Rp. " //The currency for UAE is called the Dirham
+        symbol: "Rp. "
     }
 });
 

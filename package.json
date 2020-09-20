@@ -12,6 +12,7 @@
     "core-js": "^3.6.5",
     "date-fns": "^2.16.1",
     "leaflet": "^1.7.1",
+    "leaflet.minichart": "^0.2.5",
     "numeral": "^2.0.6",
     "vue": "^3.0.0-0"
   },
