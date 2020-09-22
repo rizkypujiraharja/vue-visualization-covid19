@@ -15,7 +15,7 @@
               :class="data.diff >= 0 ? 'text-success' : 'text-danger'"
             > {{ data.diff >= 0 ? '+' : '' }}
               {{ numeral(data.diff).format('0,0') }}
-              ({{ data.diff >= 0 ? '+ ' : '' }}{{ data.percentage }}%)
+              ({{ data.diff >= 0 ? '+' : '' }}{{ isNaN(data.percentage) ? 0 : data.percentage }}%)
             </span>
           </div>
         </div>

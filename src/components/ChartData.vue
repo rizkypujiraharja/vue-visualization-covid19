@@ -10,7 +10,7 @@ import { onMounted, reactive, watch } from "vue";
 export default {
   name: "ChartData",
   props: {
-    country: String,
+    country: Object,
   },
 
   setup(props) {
@@ -46,7 +46,7 @@ export default {
       if (props.country === "all") {
         return "https://disease.sh/v3/covid-19/historical/all?lastdays=all";
       }
-      return `https://disease.sh/v3/covid-19/historical/${props.country}?lastdays=all`;
+      return `https://disease.sh/v3/covid-19/historical/${props.country.name}?lastdays=all`;
     }
 
     function loadHistory() {

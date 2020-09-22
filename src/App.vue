@@ -12,7 +12,7 @@
           <option
             v-for="(country, key) in state.countries"
             :key="key"
-            :value="country.name"
+            :value="country"
           >{{country.name}}</option>
         </select>
         <div
@@ -57,7 +57,7 @@
           <chart-data :country="state.selectedCountry"/>
         </div>
         <div class="bg-white rounded-md px-4 py-2 shadow-top mt-4" style="height: 410px;" id="mapid">
-          <Map :data="[]" />
+          <Map :dataCountries="state.dataCountries" :country="state.selectedCountry"/>
         </div>
       </div>
 
@@ -117,7 +117,7 @@ export default {
       if (state.selectedCountry === "all") {
         return "https://disease.sh/v3/covid-19/all?yesterday=";
       }
-      return `https://disease.sh/v3/covid-19/countries/${state.selectedCountry}?strict=true&yesterday=`;
+      return `https://disease.sh/v3/covid-19/countries/${state.selectedCountry.name}?strict=true&yesterday=`;
     }
 
     function getCountries(yesterday = false) {
@@ -142,7 +142,7 @@ export default {
         })
         .sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
 
-      state.dataCountries = today.map((country) => {
+      state.dataCountries = today.map(country => {
         const countryYesterday = yesterday.find(
           (p) => p.country == country.country
         );
@@ -150,6 +150,7 @@ export default {
         return {
           name: country.country,
           flag: country.countryInfo.flag,
+          coordinate: [country.countryInfo.lat, country.countryInfo.long],
           data: setSummary(country, countryYesterday),
         };
       });
