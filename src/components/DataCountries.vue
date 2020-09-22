@@ -20,7 +20,6 @@
           </span>
         </p>
       </div>
-      <hr />
     </div>
   </div>
 </template>
