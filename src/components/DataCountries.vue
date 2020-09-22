@@ -14,9 +14,8 @@
             class="ml-2 text-xs"
             :class="country.data.confirmed.diff >= 0 ? 'text-success' : 'text-danger'"
           >
-            {{ country.data.confirmed.diff >= 0 ? '+' : '' }}
-            {{ numeral(country.data.confirmed.diff).format('0,0') }}
-            ({{ country.data.confirmed.diff >= 0 ? '+' : '' }}{{country.data.confirmed.percentage }}%)
+            <span class="fa" :class="country.data.confirmed.diff >= 0 ? 'fa-arrow-up' : 'fa-arrow-down'"></span>{{ numeral(country.data.confirmed.diff).format('0,0') }}
+            ({{country.data.confirmed.percentage }}%)
           </span>
         </p>
       </div>

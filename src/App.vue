@@ -157,16 +157,14 @@ export default {
     }
 
     function setSummary(today, yesterday) {
+      let percentage = ((today.todayCases - yesterday.todayCases) / yesterday.todayCases) * 100
       return {
         confirmed: {
           today: today.todayCases,
           yesterday: yesterday.todayCases,
           total: today.cases,
           diff: today.todayCases - yesterday.todayCases,
-          percentage: (
-            ((today.todayCases - yesterday.todayCases) / yesterday.todayCases) *
-            100
-          ).toFixed(2),
+          percentage: isNaN(percentage) ? 0 : percentage.toFixed(2),
         },
         recovered: {
           today: today.todayRecovered,

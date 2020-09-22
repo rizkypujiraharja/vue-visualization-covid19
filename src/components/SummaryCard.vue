@@ -10,12 +10,10 @@
           <div class="text-3xl font-bold">{{ numeral(data.total).format('0,0') }}</div>
           <div class="text-sm flex">
             Today {{ numeral(data.today).format('0,0') }}
-            <span
-              class="ml-2 bg-white rounded py-0 px-2 text-xs"
-              :class="data.diff >= 0 ? 'text-success' : 'text-danger'"
-            > {{ data.diff >= 0 ? '+' : '' }}
+            <span class="ml-2 bg-white rounded py-0 px-2 text-xs" :class="data.diff >= 0 ? 'text-success' : 'text-danger'">
+              <span class="fa" :class="data.diff >= 0 ? 'fa-arrow-up' : 'fa-arrow-down'"></span>
               {{ numeral(data.diff).format('0,0') }}
-              ({{ data.diff >= 0 ? '+' : '' }}{{ isNaN(data.percentage) ? 0 : data.percentage }}%)
+              ({{ data.percentage }}%)
             </span>
           </div>
         </div>

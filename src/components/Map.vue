@@ -114,8 +114,8 @@ export default {
       L.popup()
         .setLatLng(country.coordinate)
         .setContent(`
-            <center><img class="w-24 h-auto rounded-sm mb-2" src="${country.flag}" /></center>
-            <p class="text-lg text-gray-700 leading-none font-semibold">${country.name}</p>
+            <center><img class="w-24 h-auto rounded-sm mb-2" src="${country.flag}" />
+            <p class="text-lg text-gray-700 leading-none font-semibold">${country.name}</p></center>
             <div class="divide-y divide-gray-400 text-md">
               <div class="py-2 text-warning">Confirmed : <b>${numberWithDot(country.data.confirmed.total)}</b></div>
               <div class="py-2 text-success">Recovered : <b>${numberWithDot(country.data.recovered.total)}</b></div>
